@@ -1,8 +1,11 @@
 SELECT 
-cruise_service_view.cruise_id,extract(year from cruise_service_view.depart_date) AS Year,cruise.doi_date, CONCAT_WS('/',distro.operator_id,distro.shipment_id) AS shipment, distro.file_name AS distro_name, pg_size_pretty(distro.file_size) AS distro_size
+cruise_service_view.cruise_id,
+extract(year from cruise_service_view.depart_date) AS Year,
+cruise.doi_date,
+CONCAT_WS('/',distro.operator_id,distro.shipment_id) AS shipment, 
+distro.file_name AS distro_name, pg_size_pretty(distro.file_size) AS distro_size
 FROM cruise_service_view 
 JOIN cruise ON cruise.id=cruise_service_view.cruise_id
 JOIN distro ON distro.cruise_id=cruise.id
 WHERE extract(year from cruise_service_view.depart_date) > 2019
 ORDER BY cruise_service_view.cruise_id, cruise_service_view.depart_date ASC ;
-
