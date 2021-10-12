@@ -1,8 +1,7 @@
 SELECT 
 cruise_service_view.cruise_id,
-extract(year from cruise_service_view.depart_date) AS Year,
 cruise.doi_date,
-/* Combine operator and shipment ids to build path*/
+extract(year from cruise_service_view.depart_date) AS Year,
 CONCAT_WS('/',distro.operator_id,distro.shipment_id) AS shipment, 
 distro.file_name AS distro_name,
 /* If the distros are more than 5e11 bytes (500GB) label as Y. */
