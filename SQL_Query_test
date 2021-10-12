@@ -5,11 +5,14 @@ cruise.doi_date,
 /* Combine operator and shipment ids to build path*/
 CONCAT_WS('/',distro.operator_id,distro.shipment_id) AS shipment, 
 distro.file_name AS distro_name,
+/* If the distros are more than 5e11 bytes (500GB) label as Y. */
 CASE WHEN distro.file_size > 5e11 THEN 'Y'
 	WHEN distro.file_size < 5e11 THEN 'N'
 	END AS ">500GB?"
 FROM cruise_service_view
 JOIN cruise ON cruise.id=cruise_service_view.cruise_id
+/* Link cruise_service_view to cruise and distro tables */
 JOIN distro ON distro.cruise_id=cruise.id
 WHERE extract(year from cruise_service_view.depart_date) > 2019
+/* Extract the year from the depart date and set condition for cruises between 2020-2021*/
 ORDER BY cruise_service_view.cruise_id, cruise_service_view.depart_date ASC ;
