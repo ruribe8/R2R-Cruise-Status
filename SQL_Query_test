@@ -1,0 +1,6 @@
+SELECT 
+cruise_service_view.cruise_id,extract(year from cruise_service_view.depart_date) AS Year,cruise_service_view.cruise_doi AS doi,cruise.doi_date
+FROM cruise_service_view
+JOIN cruise ON cruise.id=cruise_service_view.cruise_id
+WHERE extract(year from cruise_service_view.depart_date) > 2019
+ORDER BY cruise_service_view.cruise_id, cruise_service_view.depart_date ASC ;
