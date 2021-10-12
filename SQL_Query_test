@@ -2,9 +2,13 @@ SELECT
 cruise_service_view.cruise_id,
 extract(year from cruise_service_view.depart_date) AS Year,
 cruise.doi_date,
+/* Combine operator and shipment ids to build path*/
 CONCAT_WS('/',distro.operator_id,distro.shipment_id) AS shipment, 
-distro.file_name AS distro_name, pg_size_pretty(distro.file_size) AS distro_size
-FROM cruise_service_view 
+distro.file_name AS distro_name,
+CASE WHEN distro.file_size > 5e11 THEN 'Y'
+	WHEN distro.file_size < 5e11 THEN 'N'
+	END AS ">500GB?"
+FROM cruise_service_view
 JOIN cruise ON cruise.id=cruise_service_view.cruise_id
 JOIN distro ON distro.cruise_id=cruise.id
 WHERE extract(year from cruise_service_view.depart_date) > 2019
